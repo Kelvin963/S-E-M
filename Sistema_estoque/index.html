@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Estoque de Materiais</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Estoque de Materiais</h2>
+  <button onclick="logout()">Sair</button>
+
+  <h3>Adicionar Novo Material</h3>
+<form id="formMaterial">
+  <input type="text" id="nome" placeholder="Nome do material" required>
+  <input type="text" id="categoria" placeholder="Categoria" required>
+  <input type="number" id="quantidade" placeholder="Quantidade" required>
+  <input type="text" id="unidade" placeholder="Unidade (ex: kg, un)" required>
+  <button type="submit">Adicionar</button>
+</form>
+
+<h3>Movimentar Material</h3>
+<form id="formMovimentacao">
+  <select id="materialSelect" required></select>
+  <input type="number" id="qtdMovimentada" placeholder="Quantidade" required>
+  <select id="tipoMovimentacao" required>
+    <option value="entrada">Entrada</option>
+    <option value="saida">Saída</option>
+  </select>
+  <button type="submit">Movimentar</button>
+</form>
+
+  <h3>Materiais Cadastrados</h3>
+  <table border="1" id="tabelaMateriais">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Categoria</th>
+        <th>Quantidade</th>
+        <th>Unidade</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="js/estoque.js"></script>
+  <script>
+    verificarLogin();
+    carregarMateriais();
+  </script>
+</body>
+</html>
+
+<h3>Histórico de Movimentações</h3>
+<table border="1" id="tabelaHistorico">
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Material</th>
+      <th>Tipo</th>
+      <th>Quantidade</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>

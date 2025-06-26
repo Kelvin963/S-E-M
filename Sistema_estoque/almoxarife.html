@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>S-E-M | Almoxarife</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 80px;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    button.logout {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      padding: 6px 12px;
+      font-size: 14px;
+      background-color: #c0392b;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .painel {
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      margin-top: 20px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>S-E-M</h1>
+  <h2>Bem-vindo, Almoxarife</h2>
+  <button class="logout" onclick="logout()">Sair</button>
+
+  <div class="painel">
+    <div id="menuPrincipal" class="botoes-menu">
+      <button onclick="mostrarSecao('secaoCadastro')">Cadastrar Material</button>
+      <button onclick="mostrarSecao('secaoMovimentar')">Movimentar Estoque</button>
+      <button onclick="mostrarSecao('secaoEstoque')">Ver Estoque</button>
+      <button onclick="mostrarSecao('secaoHistorico')">Histórico</button>
+      <button onclick="mostrarSecao('secaoRequisicoes')">Requisições Pendentes</button>
+    </div>
+
+    <div id="secaoCadastro" class="secao">
+      <h3>Adicionar Novo Material</h3>
+      <form id="formMaterial">
+        <input type="text" id="nome" placeholder="Nome do material" required><br>
+        <input type="text" id="categoria" placeholder="Categoria" required><br>
+        <input type="number" id="quantidade" placeholder="Quantidade" required><br>
+        <input type="text" id="unidade" placeholder="Unidade (ex: kg, un)" required><br>
+        <input type="number" id="estoqueMinimo" placeholder="Estoque mínimo" required><br>
+        <button type="submit">Salvar</button>
+      </form>
+      <div style="margin-top: 20px;">
+        <button onclick="voltarAoMenu()">Voltar</button>
+      </div>
+    </div>
+
+    <div id="secaoMovimentar" class="secao">
+      <h3>Movimentar Material</h3>
+      <form id="formMovimentacao">
+        <select id="materialSelect" required></select><br>
+        <input type="number" id="qtdMovimentada" placeholder="Quantidade" required><br>
+        <select id="tipoMovimentacao" required>
+          <option value="entrada">Entrada</option>
+          <option value="saida">Saída</option>
+        </select><br>
+        <button type="submit">Movimentar</button>
+      </form>
+      <div style="margin-top: 20px;">
+        <button onclick="voltarAoMenu()">Voltar</button>
+      </div>
+    </div>
+
+    <div id="secaoEstoque" class="secao">
+      <h3>Materiais Cadastrados</h3>
+      <table border="1" id="tabelaMateriais">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Quantidade</th>
+            <th>Unidade</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div style="margin-top: 20px;">
+        <button onclick="voltarAoMenu()">Voltar</button>
+      </div>
+    </div>
+
+    <div id="secaoHistorico" class="secao">
+      <h3>Histórico de Movimentações</h3>
+      <table border="1" id="tabelaHistorico">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Material</th>
+            <th>Tipo</th>
+            <th>Quantidade</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div style="margin-top: 20px;">
+        <button onclick="voltarAoMenu()">Voltar</button>
+      </div>
+    </div>
+
+    <div id="secaoRequisicoes" class="secao">
+      <h3>Requisições Pendentes</h3>
+      <table border="1" id="tabelaRequisicoesPendentes">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Material</th>
+            <th>Quantidade</th>
+            <th>Justificativa</th>
+            <th>Usuário</th>
+            <th>Observação</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div style="margin-top: 20px;">
+        <button onclick="voltarAoMenu()">Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function mostrarSecao(id) {
+      document.querySelectorAll('.secao').forEach(secao => secao.style.display = 'none');
+      document.getElementById('menuPrincipal').style.display = 'none';
+      document.getElementById(id).style.display = 'block';
+    }
+
+    function voltarAoMenu() {
+      document.querySelectorAll('.secao').forEach(secao => secao.style.display = 'none');
+      document.getElementById('menuPrincipal').style.display = 'flex';
+    }
+
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <script type="module" src="js/almoxarife.js"></script>
+</body>
+</html>

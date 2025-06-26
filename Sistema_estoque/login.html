@@ -1,86 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>S-E-M - Login</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S-E-M | Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     body {
-      background: url('estoque.jpg') no-repeat center center fixed;
-      background-size: cover;
-      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #156d6d, #00ffa2);
+      font-family: 'Poppins', sans-serif;
       display: flex;
-      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      height: 100vh;
       margin: 0;
-      min-height: 100vh;
-      padding-top: 130px;
     }
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 40px;
-      color: white;
-      text-shadow: 1px 1px 3px #000;
-    }
-
-    .login-box {
-      background-color: #001f3f; /* azul escuro */
-      padding: 30px 40px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    .card {
       width: 100%;
-      max-width: 400px;
-      color: white;
+      max-width: 420px;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      background-color: #fff;
     }
 
-    .login-box input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    .login-box button:hover {
-      background-color: #27ae60;
-    }
-
-    .login-box p {
+    .card h2 {
       text-align: center;
-      margin-top: 15px;
-      font-size: 14px;
-      color: #ddd;
+      margin-bottom: 1.5rem;
+      color: #156d6d;
+      font-weight: 600;
     }
 
-    .login-box a {
-      color: #6ec1ff;
+    .form-control {
+      border-radius: 8px;
+    }
+
+    .btn-primary {
+      background-color: #156d6d;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .text-center a {
+      color: #156d6d;
       text-decoration: none;
-    }
-
-    .login-box a:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-
-  <h1>S-E-M</h1>
-
-  <div class="login-box">
-    <h2>Login</h2>
+  <div class="card">
+    <h2>Login no S-E-M</h2>
     <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Senha" required>
-      <button type="submit" class="btn btn-success w-100">Entrar</button>
+      <div class="mb-3">
+        <label for="email" class="form-label">E-mail</label>
+        <input type="email" class="form-control" id="email" required />
+      </div>
+      <div class="mb-3">
+        <label for="senha" class="form-label">Senha</label>
+        <input type="password" class="form-control" id="senha" required />
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Entrar</button>
     </form>
-    <p>Não tem conta? <a href="register.html">Registrar</a></p>
+    <div class="text-center mt-3">
+      Não tem uma conta? <a href="register.html">Registrar</a>
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
@@ -95,44 +84,37 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
 
       try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, senha);
         const user = userCredential.user;
-
-        const docRef = doc(db, "usuarios", user.uid);
-        const docSnap = await getDoc(docRef);
+        const docSnap = await getDoc(doc(db, "usuarios", user.uid));
 
         if (docSnap.exists()) {
           const dados = docSnap.data();
-          localStorage.setItem('usuarioLogado', JSON.stringify({ email, tipo: dados.tipo, uid: user.uid }));
+          localStorage.setItem("usuarioLogado", JSON.stringify({
+            email: user.email,
+            nome: dados.nome,
+            tipo: dados.tipo,
+            uid: user.uid
+          }));
 
-          switch (dados.tipo) {
-            case 'almoxarife':
-              window.location.href = 'almoxarife.html';
-              break;
-            case 'engenheiro':
-              window.location.href = 'engenheiro.html';
-              break;
-            case 'gestor':
-              window.location.href = 'gestor.html';
-              break;
-            default:
-              alert('Tipo de usuário desconhecido.');
-          }
+          if (dados.tipo === "almoxarife") window.location.href = "almoxarife.html";
+          else if (dados.tipo === "engenheiro") window.location.href = "engenheiro.html";
+          else if (dados.tipo === "gestor") window.location.href = "gestor.html";
+          else alert("Tipo de usuário desconhecido.");
         } else {
-          alert("Usuário sem dados complementares.");
+          alert("Dados do usuário não encontrados.");
         }
       } catch (error) {
-        alert("Erro ao logar: " + error.message);
+        alert("Erro ao fazer login: " + error.message);
       }
     });
   </script>

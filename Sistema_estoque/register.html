@@ -2,9 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>S-E-M | Registro</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     body {
@@ -43,50 +43,84 @@
       border-radius: 8px;
     }
 
-    .btn-primary:hover {
-      background-color: #125b5b;
-    }
-
     .text-center a {
       color: #156d6d;
       text-decoration: none;
     }
-
-    .text-center a:hover {
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
-
   <div class="card">
     <h2>Registro no S-E-M</h2>
     <form id="registroForm">
       <div class="mb-3">
+        <label for="nome" class="form-label">Nome Completo</label>
+        <input type="text" class="form-control" id="nome" required />
+      </div>
+      <div class="mb-3">
         <label for="email" class="form-label">E-mail</label>
-        <input type="email" class="form-control" id="email" required>
+        <input type="email" class="form-control" id="email" required />
       </div>
       <div class="mb-3">
         <label for="senha" class="form-label">Senha</label>
-        <input type="password" class="form-control" id="senha" required>
+        <input type="password" class="form-control" id="senha" required />
       </div>
       <div class="mb-3">
         <label for="cargo" class="form-label">Cargo</label>
-        <select class="form-select" id="cargo" required>
-          <option value="">Selecione o cargo</option>
-          <option value="engenheiro">Engenheiro</option>
+        <select id="cargo" class="form-select" required>
+          <option value="">Selecione</option>
           <option value="almoxarife">Almoxarife</option>
-          <option value="gestor">Gestor</option> 
+          <option value="engenheiro">Engenheiro</option>
+          <option value="gestor">Gestor</option>
         </select>
       </div>
       <button type="submit" class="btn btn-primary w-100">Registrar</button>
     </form>
-
     <div class="text-center mt-3">
-      Já tem uma conta? <a href="login.html">Login</a>
+      Já tem uma conta? <a href="login.html">Entrar</a>
     </div>
   </div>
 
-  <script type="module" src="js/registro.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCGnam76YFSvlMWDJg3i7VoIGiXegKciTc",
+      authDomain: "fir-e-m-4926f.firebaseapp.com",
+      projectId: "fir-e-m-4926f",
+      storageBucket: "fir-e-m-4926f.appspot.com",
+      messagingSenderId: "296773921591",
+      appId: "1:296773921591:web:a6c39fb8ef30c18be848b2",
+      measurementId: "G-HR35PY73YT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    document.getElementById("registroForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value;
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      const cargo = document.getElementById("cargo").value;
+
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, senha);
+        await setDoc(doc(db, "usuarios", cred.user.uid), {
+          nome,
+          tipo: cargo
+        });
+
+        alert("Cadastro realizado com sucesso!");
+        window.location.href = "login.html";
+      } catch (error) {
+        alert("Erro no registro: " + error.message);
+      }
+    });
+  </script>
 </body>
 </html>

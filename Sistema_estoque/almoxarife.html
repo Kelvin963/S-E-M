@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>S-E-M | Almoxarife</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg-base: #156d6d;
-      --card-bg: #fff;
-      --text-dark: #222;
-      --text-muted: #ccc;
       --primary: #00ffa2;
       --radius: 12px;
     }
@@ -20,16 +18,19 @@
       font-family: 'Poppins', sans-serif;
       padding-top: 80px;
       margin: 0;
-      color: var(--text-dark);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     h1, h2, h3 {
       text-align: center;
-      color: #fff;
     }
 
     .painel {
-      background-color: white;
+      background-color: #fff;
+      color: #333;
       padding: 2rem 3rem;
       border-radius: var(--radius);
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -37,42 +38,12 @@
       margin: 2rem auto;
     }
 
-    .card-info {
-      background: #f5f5f5;
-      border-radius: var(--radius);
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
     .botoes-menu button {
-      margin: 0.25rem;
+      margin: 0.3rem;
     }
 
     .secao {
       display: none;
-    }
-
-    .barra-container {
-      background-color: #e9ecef;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-      overflow: hidden;
-    }
-
-    .barra-preenchida {
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1rem;
-      color: #fff;
-      font-weight: bold;
-      font-size: 0.9rem;
-    }
-
-    .barra-label {
-      margin-bottom: 0.25rem;
-      font-weight: 500;
     }
 
     button.logout {
@@ -82,10 +53,23 @@
       z-index: 1030;
     }
 
+    .card-info {
+      background: #f5f5f5;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    #perfilNome {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
     footer {
       background-color: #111;
       padding: 40px 0;
       color: #bbb;
+      margin-top: auto;
     }
 
     footer hr {
@@ -97,30 +81,17 @@
   <button class="btn btn-danger logout" onclick="logout()">Sair</button>
 
   <h1>S-E-M</h1>
-  <h2>Bem-vindo, Almoxarife</h2>
+  <h2>Bem-vindo, <span id="perfilNome">Almoxarife</span></h2>
 
   <div class="painel">
-
-    <!-- Perfil -->
     <div class="card-info">
       <h4>Perfil do Almoxarife</h4>
-      <p><strong>Nome:</strong> Carla Rodrigues</p>
-      <p><strong>Responsável pelo:</strong> Controle e gestão de materiais</p>
-      <p><strong>Email:</strong> carla.rodrigues@empresa.com</p>
+      <p><strong>Nome:</strong> <span id="perfilNomeDetalhe">Carregando...</span></p>
+      <p><strong>Responsável:</strong> Controle e gestão de materiais</p>
+      <p><strong>Email:</strong> <span id="perfilEmail">---</span></p>
     </div>
 
-    <!-- Indicadores -->
-    <div class="card-info">
-      <h4>Indicadores Rápidos</h4>
-      <ul>
-        <li><strong>Últimos cadastros:</strong> 3 novos materiais esta semana</li>
-        <li><strong>Movimentações recentes:</strong> 15 entradas, 8 saídas</li>
-        <li><strong>Requisições pendentes:</strong> 5 aguardando aprovação</li>
-      </ul>
-    </div>
-
-    <!-- Menu principal -->
-    <div id="menuPrincipal" class="botoes-menu d-flex flex-wrap justify-content-center mb-4">
+    <div class="botoes-menu d-flex flex-wrap justify-content-center mb-4" id="menuPrincipal">
       <button class="btn btn-primary" onclick="mostrarSecao('secaoCadastro')">Cadastrar Material</button>
       <button class="btn btn-primary" onclick="mostrarSecao('secaoMovimentar')">Movimentar Estoque</button>
       <button class="btn btn-primary" onclick="mostrarSecao('secaoEstoque')">Ver Estoque</button>
@@ -223,7 +194,6 @@
       </div>
       <button class="btn btn-secondary mt-3" onclick="voltarAoMenu()">Voltar</button>
     </div>
-
   </div>
 
   <!-- Rodapé -->
@@ -259,6 +229,17 @@
       localStorage.removeItem("usuarioLogado");
       window.location.href = "login.html";
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
+      if (usuario?.nome) {
+        document.getElementById("perfilNome").textContent = usuario.nome;
+        document.getElementById("perfilNomeDetalhe").textContent = usuario.nome;
+      }
+      if (usuario?.email) {
+        document.getElementById("perfilEmail").textContent = usuario.email;
+      }
+    });
   </script>
 
   <script type="module" src="js/almoxarife.js"></script>

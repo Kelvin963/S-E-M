@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>S-E-M | Gestor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg-base: #156d6d;
-      --card-bg: #fff;
-      --text-dark: #222;
-      --text-muted: #ccc;
       --primary: #00ffa2;
       --radius: 12px;
     }
@@ -20,16 +18,19 @@
       font-family: 'Poppins', sans-serif;
       padding-top: 80px;
       margin: 0;
-      color: var(--text-dark);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     h1, h2, h3 {
       text-align: center;
-      color: #fff;
     }
 
     .painel {
-      background-color: white;
+      background-color: #fff;
+      color: #333;
       padding: 2rem 3rem;
       border-radius: var(--radius);
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -45,7 +46,7 @@
     }
 
     .botoes-menu button {
-      margin: 0.25rem;
+      margin: 0.3rem;
     }
 
     .secao {
@@ -59,18 +60,20 @@
       z-index: 1030;
     }
 
-    table th {
-      background-color: #f8f9fa;
-    }
-
     footer {
       background-color: #111;
       padding: 40px 0;
       color: #bbb;
+      margin-top: auto;
     }
 
     footer hr {
       border-color: #333;
+    }
+
+    #perfilNome {
+      font-weight: 600;
+      color: var(--primary);
     }
   </style>
 </head>
@@ -78,26 +81,17 @@
   <button class="btn btn-danger logout" onclick="logout()">Sair</button>
 
   <h1>S-E-M</h1>
-  <h2>Bem-vindo, Gestor</h2>
+  <h2>Bem-vindo, <span id="perfilNome">Gestor</span></h2>
 
   <div class="painel">
     <div class="card-info">
       <h4>Perfil do Gestor</h4>
-      <p><strong>Nome:</strong> Marcos Ferreira</p>
-      <p><strong>Responsável por:</strong> Supervisão de operações e aprovação de requisições</p>
-      <p><strong>Email:</strong> marcos.ferreira@empresa.com</p>
+      <p><strong>Nome:</strong> <span id="perfilNomeDetalhe">Carregando...</span></p>
+      <p><strong>Responsável:</strong> Análise de dados e decisões estratégicas</p>
+      <p><strong>Email:</strong> <span id="perfilEmail">---</span></p>
     </div>
 
-    <div class="card-info">
-      <h4>Indicadores Rápidos</h4>
-      <ul>
-        <li><strong>Total de materiais cadastrados:</strong> 128</li>
-        <li><strong>Movimentações hoje:</strong> 12 entradas, 9 saídas</li>
-        <li><strong>Requisições aguardando aprovação:</strong> 4</li>
-      </ul>
-    </div>
-
-    <div id="menuPrincipal" class="botoes-menu d-flex flex-wrap justify-content-center mb-4">
+    <div class="botoes-menu d-flex flex-wrap justify-content-center mb-4" id="menuPrincipal">
       <button class="btn btn-primary" onclick="mostrarSecao('secaoMateriais')">Relatório de Materiais</button>
       <button class="btn btn-primary" onclick="mostrarSecao('secaoHistorico')">Histórico de Movimentações</button>
     </div>
@@ -108,7 +102,7 @@
       <button class="btn btn-success mb-3" onclick="exportarMateriaisCSV()">Exportar Estoque (CSV)</button>
       <div class="table-responsive">
         <table class="table table-bordered table-hover" id="tabelaMateriais">
-          <thead>
+          <thead class="table-light">
             <tr>
               <th>Nome</th>
               <th>Categoria</th>
@@ -126,9 +120,22 @@
     <!-- Histórico -->
     <div id="secaoHistorico" class="secao">
       <h3>Histórico de Movimentações</h3>
+      <div class="mb-3 d-flex flex-wrap align-items-center">
+        <input type="text" id="filtroNome" class="form-control mb-2" placeholder="Filtrar por nome" />
+        <select id="filtroTipo" class="form-select mb-2" style="max-width: 180px;">
+          <option value="">Todos os tipos</option>
+          <option value="entrada">Entrada</option>
+          <option value="saida">Saída</option>
+          <option value="cadastro">Cadastro</option>
+          <option value="edicao">Edição</option>
+          <option value="remocao">Remoção</option>
+        </select>
+        <button class="btn btn-primary mb-2" onclick="carregarHistorico()">Filtrar</button>
+      </div>
+      <button class="btn btn-success mb-3" onclick="exportarHistoricoCSV()">Exportar Histórico (CSV)</button>
       <div class="table-responsive">
         <table class="table table-bordered table-hover" id="tabelaHistorico">
-          <thead>
+          <thead class="table-light">
             <tr>
               <th>Data</th>
               <th>Material</th>
@@ -143,13 +150,12 @@
     </div>
   </div>
 
-  <!-- Rodapé -->
   <footer class="text-light mt-5">
     <div class="container">
       <div class="row">
         <div class="col-md-4">
           <h4><span style="color: var(--primary);">|</span><strong> S-E-M</strong></h4>
-          <p>Sistema de Estoque de Materiais. Painel do Gestor para supervisão e decisões estratégicas.</p>
+          <p>Sistema de Estoque de Materiais. Página do Gestor para visualização estratégica de informações.</p>
         </div>
         <div class="col-md-4"></div>
         <div class="col-md-4"></div>
@@ -175,6 +181,17 @@
       localStorage.removeItem("usuarioLogado");
       window.location.href = "login.html";
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
+      if (usuario?.nome) {
+        document.getElementById("perfilNome").textContent = usuario.nome;
+        document.getElementById("perfilNomeDetalhe").textContent = usuario.nome;
+      }
+      if (usuario?.email) {
+        document.getElementById("perfilEmail").textContent = usuario.email;
+      }
+    });
   </script>
 
   <script type="module" src="js/gestor.js"></script>

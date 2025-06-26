@@ -1,159 +1,248 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>S-E-M | Almoxarife</title>
-  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --bg-base: #156d6d;
+      --card-bg: #fff;
+      --text-dark: #222;
+      --text-muted: #ccc;
+      --primary: #00ffa2;
+      --radius: 12px;
+    }
+
     body {
-      background-color: #f9f9f9;
-      font-family: Arial, sans-serif;
-      text-align: center;
+      background-color: var(--bg-base);
+      font-family: 'Poppins', sans-serif;
       padding-top: 80px;
       margin: 0;
+      color: var(--text-dark);
     }
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: #555;
-    }
-
-    button.logout {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      padding: 6px 12px;
-      font-size: 14px;
-      background-color: #c0392b;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+    h1, h2, h3 {
+      text-align: center;
+      color: #fff;
     }
 
     .painel {
       background-color: white;
-      padding: 30px 40px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 1000px;
-      margin: 0 auto;
-      margin-top: 20px;
-      text-align: left;
+      padding: 2rem 3rem;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      max-width: 1100px;
+      margin: 2rem auto;
+    }
+
+    .card-info {
+      background: #f5f5f5;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .botoes-menu button {
+      margin: 0.25rem;
+    }
+
+    .secao {
+      display: none;
+    }
+
+    .barra-container {
+      background-color: #e9ecef;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .barra-preenchida {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      color: #fff;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .barra-label {
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+    }
+
+    button.logout {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      z-index: 1030;
+    }
+
+    footer {
+      background-color: #111;
+      padding: 40px 0;
+      color: #bbb;
+    }
+
+    footer hr {
+      border-color: #333;
     }
   </style>
 </head>
 <body>
+  <button class="btn btn-danger logout" onclick="logout()">Sair</button>
+
   <h1>S-E-M</h1>
   <h2>Bem-vindo, Almoxarife</h2>
-  <button class="logout" onclick="logout()">Sair</button>
 
   <div class="painel">
-    <div id="menuPrincipal" class="botoes-menu">
-      <button onclick="mostrarSecao('secaoCadastro')">Cadastrar Material</button>
-      <button onclick="mostrarSecao('secaoMovimentar')">Movimentar Estoque</button>
-      <button onclick="mostrarSecao('secaoEstoque')">Ver Estoque</button>
-      <button onclick="mostrarSecao('secaoHistorico')">Histórico</button>
-      <button onclick="mostrarSecao('secaoRequisicoes')">Requisições Pendentes</button>
+
+    <!-- Perfil -->
+    <div class="card-info">
+      <h4>Perfil do Almoxarife</h4>
+      <p><strong>Nome:</strong> Carla Rodrigues</p>
+      <p><strong>Responsável pelo:</strong> Controle e gestão de materiais</p>
+      <p><strong>Email:</strong> carla.rodrigues@empresa.com</p>
     </div>
 
+    <!-- Indicadores -->
+    <div class="card-info">
+      <h4>Indicadores Rápidos</h4>
+      <ul>
+        <li><strong>Últimos cadastros:</strong> 3 novos materiais esta semana</li>
+        <li><strong>Movimentações recentes:</strong> 15 entradas, 8 saídas</li>
+        <li><strong>Requisições pendentes:</strong> 5 aguardando aprovação</li>
+      </ul>
+    </div>
+
+    <!-- Menu principal -->
+    <div id="menuPrincipal" class="botoes-menu d-flex flex-wrap justify-content-center mb-4">
+      <button class="btn btn-primary" onclick="mostrarSecao('secaoCadastro')">Cadastrar Material</button>
+      <button class="btn btn-primary" onclick="mostrarSecao('secaoMovimentar')">Movimentar Estoque</button>
+      <button class="btn btn-primary" onclick="mostrarSecao('secaoEstoque')">Ver Estoque</button>
+      <button class="btn btn-primary" onclick="mostrarSecao('secaoHistorico')">Histórico</button>
+      <button class="btn btn-primary" onclick="mostrarSecao('secaoRequisicoes')">Requisições Pendentes</button>
+    </div>
+
+    <!-- Cadastro -->
     <div id="secaoCadastro" class="secao">
       <h3>Adicionar Novo Material</h3>
-      <form id="formMaterial">
-        <input type="text" id="nome" placeholder="Nome do material" required><br>
-        <input type="text" id="categoria" placeholder="Categoria" required><br>
-        <input type="number" id="quantidade" placeholder="Quantidade" required><br>
-        <input type="text" id="unidade" placeholder="Unidade (ex: kg, un)" required><br>
-        <input type="number" id="estoqueMinimo" placeholder="Estoque mínimo" required><br>
-        <button type="submit">Salvar</button>
+      <form id="formMaterial" class="row g-3">
+        <div class="col-md-6"><input type="text" id="nome" class="form-control" placeholder="Nome do material" required /></div>
+        <div class="col-md-6"><input type="text" id="categoria" class="form-control" placeholder="Categoria" required /></div>
+        <div class="col-md-4"><input type="number" id="quantidade" class="form-control" placeholder="Quantidade" required /></div>
+        <div class="col-md-4"><input type="text" id="unidade" class="form-control" placeholder="Unidade (ex: kg, un)" required /></div>
+        <div class="col-md-4"><input type="number" id="estoqueMinimo" class="form-control" placeholder="Estoque mínimo" required /></div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-success">Salvar</button>
+          <button type="button" class="btn btn-secondary ms-2" onclick="voltarAoMenu()">Voltar</button>
+        </div>
       </form>
-      <div style="margin-top: 20px;">
-        <button onclick="voltarAoMenu()">Voltar</button>
-      </div>
     </div>
 
+    <!-- Movimentar -->
     <div id="secaoMovimentar" class="secao">
       <h3>Movimentar Material</h3>
-      <form id="formMovimentacao">
-        <select id="materialSelect" required></select><br>
-        <input type="number" id="qtdMovimentada" placeholder="Quantidade" required><br>
-        <select id="tipoMovimentacao" required>
-          <option value="entrada">Entrada</option>
-          <option value="saida">Saída</option>
-        </select><br>
-        <button type="submit">Movimentar</button>
+      <form id="formMovimentacao" class="row g-3">
+        <div class="col-md-6"><select id="materialSelect" class="form-select" required></select></div>
+        <div class="col-md-3"><input type="number" id="qtdMovimentada" class="form-control" placeholder="Quantidade" required /></div>
+        <div class="col-md-3">
+          <select id="tipoMovimentacao" class="form-select" required>
+            <option value="entrada">Entrada</option>
+            <option value="saida">Saída</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-success">Movimentar</button>
+          <button type="button" class="btn btn-secondary ms-2" onclick="voltarAoMenu()">Voltar</button>
+        </div>
       </form>
-      <div style="margin-top: 20px;">
-        <button onclick="voltarAoMenu()">Voltar</button>
-      </div>
     </div>
 
+    <!-- Estoque -->
     <div id="secaoEstoque" class="secao">
       <h3>Materiais Cadastrados</h3>
-      <table border="1" id="tabelaMateriais">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Categoria</th>
-            <th>Quantidade</th>
-            <th>Unidade</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <div style="margin-top: 20px;">
-        <button onclick="voltarAoMenu()">Voltar</button>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="tabelaMateriais">
+          <thead class="table-light">
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Quantidade</th>
+              <th>Unidade</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
+      <button class="btn btn-secondary mt-3" onclick="voltarAoMenu()">Voltar</button>
     </div>
 
+    <!-- Histórico -->
     <div id="secaoHistorico" class="secao">
       <h3>Histórico de Movimentações</h3>
-      <table border="1" id="tabelaHistorico">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Material</th>
-            <th>Tipo</th>
-            <th>Quantidade</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <div style="margin-top: 20px;">
-        <button onclick="voltarAoMenu()">Voltar</button>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="tabelaHistorico">
+          <thead class="table-light">
+            <tr>
+              <th>Data</th>
+              <th>Material</th>
+              <th>Tipo</th>
+              <th>Quantidade</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
+      <button class="btn btn-secondary mt-3" onclick="voltarAoMenu()">Voltar</button>
     </div>
 
+    <!-- Requisições -->
     <div id="secaoRequisicoes" class="secao">
       <h3>Requisições Pendentes</h3>
-      <table border="1" id="tabelaRequisicoesPendentes">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Material</th>
-            <th>Quantidade</th>
-            <th>Justificativa</th>
-            <th>Usuário</th>
-            <th>Observação</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <div style="margin-top: 20px;">
-        <button onclick="voltarAoMenu()">Voltar</button>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="tabelaRequisicoesPendentes">
+          <thead class="table-light">
+            <tr>
+              <th>Data</th>
+              <th>Material</th>
+              <th>Quantidade</th>
+              <th>Justificativa</th>
+              <th>Usuário</th>
+              <th>Observação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
+      <button class="btn btn-secondary mt-3" onclick="voltarAoMenu()">Voltar</button>
     </div>
+
   </div>
 
+  <!-- Rodapé -->
+  <footer class="text-light mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h4><span style="color: var(--primary);">|</span><strong> S-E-M</strong></h4>
+          <p>Sistema de Estoque de Materiais. Página do Almoxarife para controle total de entradas e saídas.</p>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+      </div>
+      <hr />
+      <div class="text-center">&copy; 2025 <strong>S-E-M</strong>. Todos os direitos reservados.</div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
   <script>
     function mostrarSecao(id) {
       document.querySelectorAll('.secao').forEach(secao => secao.style.display = 'none');
@@ -173,5 +262,6 @@
   </script>
 
   <script type="module" src="js/almoxarife.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

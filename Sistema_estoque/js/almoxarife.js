@@ -1,3 +1,5 @@
+// ✅ almoxarife.js atualizado com estatísticas via Firestore
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
 import {
   getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, getDoc, query, where
@@ -71,7 +73,7 @@ async function carregarMateriais() {
   });
 }
 
-document.getElementById("formMaterial").addEventListener("submit", async (e) => {
+document.getElementById("formMaterial")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const material = {
     nome: document.getElementById("nome").value,
@@ -141,7 +143,6 @@ async function carregarOpcoesSelect() {
   });
 }
 
-// -------- Movimentação --------
 document.getElementById("formMovimentacao")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const id = document.getElementById("materialSelect").value;
@@ -168,7 +169,6 @@ async function movimentarMaterialFirebase(id, qtd, tipo) {
   await registrarHistoricoFirestore(dados.nome, tipo, qtd);
 }
 
-// -------- Histórico --------
 async function carregarHistorico() {
   const tabela = document.getElementById("tabelaHistorico");
   if (!tabela) return;
@@ -188,7 +188,6 @@ async function carregarHistorico() {
   });
 }
 
-// -------- Requisições pendentes --------
 async function carregarRequisicoesPendentes() {
   const tbody = document.querySelector("#tabelaRequisicoesPendentes tbody");
   if (!tbody) return;
@@ -241,4 +240,35 @@ window.responderRequisicao = async (id, aprovar) => {
 
   carregarRequisicoesPendentes();
   carregarMateriais();
+};
+
+// ✅ Estatísticas com dados do Firestore
+window.gerarEstatisticas = async function () {
+  const container = document.getElementById('barrasEstoque');
+  container.innerHTML = '';
+
+  const snapshot = await getDocs(collection(db, "materiais"));
+
+  snapshot.forEach((docSnap) => {
+    const mat = docSnap.data();
+    const quantidade = parseInt(mat.quantidade || 0);
+    const minimo = parseInt(mat.minimo || 1);
+    const porcentagem = Math.min(100, Math.round((quantidade / minimo) * 100));
+
+    let cor = '#28a745';
+    if (porcentagem < 60) cor = '#ffc107';
+    if (porcentagem < 30) cor = '#dc3545';
+
+    const barra = document.createElement('div');
+    barra.innerHTML = `
+      <div class="barra-label">${mat.nome} (${quantidade}/${minimo})</div>
+      <div class="barra-container">
+        <div class="barra-preenchida" style="width: ${porcentagem}%; background-color: ${cor};">
+          <span>${mat.nome}</span>
+          <span>${porcentagem}%</span>
+        </div>
+      </div>
+    `;
+    container.appendChild(barra);
+  });
 };

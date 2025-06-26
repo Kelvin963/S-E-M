@@ -1,25 +1,92 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Cadastro</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S-E-M | Registro</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #156d6d, #00ffa2);
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 450px;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      background-color: #fff;
+    }
+
+    .card h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #156d6d;
+      font-weight: 600;
+    }
+
+    .form-control {
+      border-radius: 8px;
+    }
+
+    .btn-primary {
+      background-color: #156d6d;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .btn-primary:hover {
+      background-color: #125b5b;
+    }
+
+    .text-center a {
+      color: #156d6d;
+      text-decoration: none;
+    }
+
+    .text-center a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <h2>Cadastro de Usuário</h2>
-  <form id="registerForm">
-    <input type="email" id="email" placeholder="Email" required><br>
-    <input type="password" id="password" placeholder="Senha" required><br>
-    <select id="tipo" required>
-      <option value="" disabled selected>Selecione o perfil</option>
-      <option value="almoxarife">Almoxarife</option>
-      <option value="engenheiro">Engenheiro</option>
-      <option value="gestor">Gestor</option>
-    </select><br>
-    <button type="submit">Registrar</button>
-  </form>
-  <p>Já tem conta? <a href="login.html">Login</a></p>
 
-  <script type="module" src="js/auth.js"></script>
+  <div class="card">
+    <h2>Registro no S-E-M</h2>
+    <form id="registroForm">
+      <div class="mb-3">
+        <label for="email" class="form-label">E-mail</label>
+        <input type="email" class="form-control" id="email" required>
+      </div>
+      <div class="mb-3">
+        <label for="senha" class="form-label">Senha</label>
+        <input type="password" class="form-control" id="senha" required>
+      </div>
+      <div class="mb-3">
+        <label for="cargo" class="form-label">Cargo</label>
+        <select class="form-select" id="cargo" required>
+          <option value="">Selecione o cargo</option>
+          <option value="engenheiro">Engenheiro</option>
+          <option value="almoxarife">Almoxarife</option>
+          <option value="gestor">Gestor</option> 
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Registrar</button>
+    </form>
+
+    <div class="text-center mt-3">
+      Já tem uma conta? <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <script type="module" src="js/registro.js"></script>
 </body>
 </html>

@@ -58,11 +58,6 @@ Sistema web desenvolvido como projeto da unidade curricular **Extensão – Prog
 
 ###  Estilo
 - `style.css` – Estilo visual das páginas
-
-###  Recursos Visuais
-- `logo.png` – Logotipo do sistema
-- `estoque.jpg` – Imagem ilustrativa (usada para fins visuais ou no relatório)
-
 ---
 
 ##  Contribuição aos ODS

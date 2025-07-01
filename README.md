@@ -40,7 +40,6 @@ Sistema web desenvolvido como projeto da unidade curricular **Extensão – Prog
 
 ##  Estrutura de Arquivos
 
-###  JavaScript
 - `auth.js` – Registro e login de usuários com Firebase Authentication
 - `almoxarife.js` – Funcionalidades do perfil **almoxarife**: cadastro, movimentação, histórico, requisições
 - `engenheiro.js` – Funcionalidades do perfil **engenheiro**: envio de requisições e visualização de materiais
@@ -48,16 +47,15 @@ Sistema web desenvolvido como projeto da unidade curricular **Extensão – Prog
 - `estoque.js` – Versão alternativa offline com `localStorage` (sem Firebase)
 - `utils.js` – Funções auxiliares (verificação de login e logout)
 
-###  HTML
 - `index.html` – Página inicial do sistema
 - `login.html` – Tela de login
 - `register.html` – Tela de cadastro de novos usuários
 - `almoxarife.html` – Interface exclusiva para o almoxarife
 - `engenheiro.html` – Interface exclusiva para o engenheiro
 - `gestor.html` – Interface exclusiva para o gestor
-
-###  Estilo
+- 
 - `style.css` – Estilo visual das páginas
+- 
 ---
 
 ##  Contribuição aos ODS
